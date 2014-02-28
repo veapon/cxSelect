@@ -8,6 +8,7 @@
  */
 (function($){
 	$.fn.cxSelect=function(settings){
+
 		if(this.length<1){return;};
 		settings=$.extend({},$.cxSelect.defaults,settings);
 		if(!settings.selects.length){return;};
@@ -68,7 +69,9 @@
 			box_obj.delegate("select","change",function(){
 				selectChange(this.className);
 			});
-			
+
+			// 触发选择框改变事件
+			select_arr[0].change();
 			init_timeout();
 		};
 
@@ -128,10 +131,19 @@
 		};
 
 		// 获取数据，初始化
-		$.getJSON(settings.url,function(json){
-			data_json=json;
+		// 如果传入对象参数，则直接使用这份数据 mod by veapon
+		if( typeof( settings.data_json ) == 'object' )
+		{
+			data_json = settings.data_json;
 			init();
-		});
+		}
+		else
+		{
+			$.getJSON(settings.url,function(json){
+				data_json=json;
+				init();
+			});
+		}
 	};
 	
 	// 默认值
